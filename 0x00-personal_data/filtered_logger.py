@@ -20,7 +20,8 @@ class RedactingFormatter(logging.Formatter):
     """
 
     def __init__(self, fields: List[str]):
-        super().__init__("[HOLBERTON] user_data %(levelname)s %(asctime)-15s: %(message)s")
+        super().__init__("[HOLBERTON] user_data %(levelname)s \
+                         %(asctime)-15s: %(message)s")
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
@@ -33,12 +34,14 @@ class RedactingFormatter(logging.Formatter):
         return log_message
 
 
-def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> str:
+def filter_datum(fields: List[str], redaction: str, message: str,
+                 separator: str) -> str:
     """
     Returns the log message obfuscated
     """
     pattern = r'(' + '|'.join(fields) + r')=.*?' + separator
-    return re.sub(pattern, lambda x: x.group(1) + '=' + redaction + separator, message)
+    return re.sub(pattern, lambda x: x.group(1) + '=' + redaction +
+                  separator, message)
 
 
 def get_logger() -> logging.Logger:
@@ -57,7 +60,8 @@ def get_logger() -> logging.Logger:
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """
-    Returns a connector to the database (mysql.connector.connection.MySQLConnection object)
+    Returns a connector to the database
+    (mysql.connector.connection.MySQLConnection object)
     """
     username = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
     password = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
@@ -74,7 +78,8 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
 def main() -> None:
     """
-    Retrieve all rows in the users table and display each row under a filtered format
+    Retrieve all rows in the users table and display each row under
+    a filtered format
     """
     logger = get_logger()
     db = get_db()
