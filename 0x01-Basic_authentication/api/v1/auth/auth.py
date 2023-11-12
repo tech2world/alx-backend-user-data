@@ -5,12 +5,13 @@
 from flask import request
 from typing import List, TypeVar
 
+
 class Auth():
     """
     Authentication class
     """
 
-    def require_auth(self, path: str, excluded_paths: List[str]) -> bool :
+    def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """
          Check if authentication is required for the given path.
 
@@ -34,8 +35,16 @@ class Auth():
                 return False
         return True
 
-
     def authorization_header(self, request=None) -> str:
+        """
+        Retrieve the authorization header from the request.
+
+        Args:
+            request: The request object.
+
+        Returns:
+            str: The value of the Authorization header.
+        """
         if request is None:
             return None
         if 'Authorization' not in request.headers:
@@ -43,4 +52,33 @@ class Auth():
         return request.headers["Authorization"]
 
     def current_user(self, request=None) -> TypeVar('User'):
+        """
+        Retrieve the current user based on the request.
+
+        Args:
+            request: The request object.
+
+        Returns:
+            TypeVar('User'): The current user.
+        """
         return None
+
+    def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
+        """
+        Determines if the path requires authentication.
+
+        path: The path to check.
+        excluded_paths: A list of paths that are excluded from authentication.
+        return: True if authentication is required, False otherwise.
+        """
+        if not path or not isinstance(path, str):
+            return True
+
+        for excluded_path in excluded_paths:
+            if excluded_path.endswith('*') and path.startswith(
+                                                excluded_path[:-1]):
+                return False
+            elif path == excluded_path:
+                return False
+
+        return True

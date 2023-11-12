@@ -49,7 +49,8 @@ class BasicAuth(Auth):
 
         try:
             # Use base64.urlsafe_b64decode instead of base64.b64decode
-            decoded_bytes = base64.urlsafe_b64decode(base64_authorization_header)
+            decoded_bytes = base64.urlsafe_b64decode(
+                            base64_authorization_header)
             # Decode the bytes using UTF-8, ignore errors
             return decoded_bytes.decode('utf-8', errors='ignore')
 
@@ -103,8 +104,9 @@ class BasicAuth(Auth):
         """
         Returns the User instance based on email and password.
         Returns None if user_email or user_pwd is None or not a string.
-        Returns None if the database doesn’t contain any User instance
+        Returns None if the database does not contain any User instance
         with email equal to user_email.
+
         Returns None if user_pwd is not the passwrd of the User instance found
         Otherwise, returns the User instance.
         """
@@ -147,7 +149,8 @@ class BasicAuth(Auth):
         if decoded_auth_header is None:
             return None
 
-        user_email, user_pwd = self.extract_user_credentials(decoded_auth_header)
+        user_email, user_pwd = self.extract_user_credentials(
+                                            decoded_auth_header)
 
         if user_email is None or user_pwd is None:
             return None
